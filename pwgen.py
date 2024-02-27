@@ -22,7 +22,7 @@ def new_rand():
         my_password += chr(randint(33,126))
 
     # output password to the screen
-        pw_entry.insert(0, my_password)
+    pw_entry.insert(0, my_password)
 
 def clipper():
     pass
