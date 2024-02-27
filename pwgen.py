@@ -5,8 +5,8 @@ root = Tk()
 root.title("Password Generator")
 root.geometry("500x300")
 
-my_password = chr(randint(33,126))
-
+my_password = chr(randint(33,126)) # uses ascii values
+# Create Strong password
 def new_rand():
     # Clear our entry box
     pw_entry.delete(0,END)
@@ -23,9 +23,10 @@ def new_rand():
 
     # output password to the screen
     pw_entry.insert(0, my_password)
-
+# Copy to clipboard
 def clipper():
-    pass
+    root.clipboard_clear()
+    root.clipboard_append(pw_entry.get())
 # label
 l=LabelFrame(root, text="How Many Characters?")
 l.pack(pady=20)
