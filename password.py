@@ -34,6 +34,7 @@ def retrieve_password():
 # Initialize Tkinter
 root = tk.Tk()
 root.title("Password Manager")
+root.iconbitmap("1st.ico")
 
 # Create GUI components
 username_label = tk.Label(root, text="Username:")

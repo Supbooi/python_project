@@ -5,6 +5,7 @@ from random import randint
 root = Tk()
 root.title("Password Generator")
 root.geometry("1080x720")  # Set window size
+root.iconbitmap("1st.ico")
 
 # Load the image
 image = Image.open('dashboard.png')

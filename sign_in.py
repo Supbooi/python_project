@@ -52,6 +52,7 @@ register = Tk()
 register.title("Register")
 register.geometry("920x500+300+200")
 register.config(bg="#fff")
+register.iconbitmap("1st.ico")
 register.resizable(False, False)
 
 # Background Image
