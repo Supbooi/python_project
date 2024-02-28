@@ -1,106 +1,95 @@
-from tkinter import*
+import tkinter as tk
 from tkinter import messagebox
 import pymysql
 
-def register_page():
+def login_user():
+    username = user_entry.get()
+    user_password = password_entry.get()
+
+    if not username or not user_password:
+        messagebox.showerror("Error", "All fields are required.")
+        return
+
+    try:
+        connection = pymysql.connect(host='localhost', user='root', password='plmokn@12', database='userdata')
+        cursor = connection.cursor()
+    except:
+        messagebox.showerror("Error","Invalid Connection")
+        return
+
+    query = 'SELECT * FROM data WHERE username=%s AND password=%s'
+    cursor.execute(query, (username, user_password))
+    row = cursor.fetchone()
+    if row == None:
+        messagebox.showerror("Error","Invalid Username or Password")
+    else:
+        messagebox.showinfo("Succes","Login in sucessfull")
+
     root.destroy()
-    import sign_in
-
-def database():
-    if user.get()=="" or password.get()=="":
-        messagebox.showerror("Error","All fields are requried")
-
-root=Tk()
+    import pwgen
+       
+root = tk.Tk()
 root.title('LOGIN')
-root.geometry('925x500+300+200') #size of background
+root.geometry('925x500+300+200')
+root.configure(bg='#f0f0f0')
 root.iconbitmap("1st.ico")
-root.configure(bg='#fff') #background
-root.resizable(False,False) #resize horizontal ways or vertical ways
+root.resizable(False,False)
 
+# Frame for Login
+frame = tk.Frame(root, width=350, height=350, bg='#f0f0f0')
+frame.place(x=480, y=70)
 
-
-
-# def signin():
-#     Username=user.get()
-#     Password=password.get()
-
-   
-#     if Username=='@dmin' and Password=='6969':
-#         screen=Toplevel(root)
-#         screen.title('App')
-#         screen.geometry('925x500+300+200')
-#         screen.config(bg='light grey')
-
-#         Label(screen,text="Secure Your Password",bg='light grey',font=('Calibri(Body)',20,'bold'))
-#         label.place(x=10,y=5)
-
-
-#         screen.mainloop()
-
-#         # print('Logged in succesfully')
-    
-#     elif Username!='@dmin' and Password!='6969':
-#         messagebox.showerror("Error","Username or password is incorrect")
-    
-#     elif password!='6969':
-#         messagebox.showerror("Error","Invalid Password!")
-
-#     elif Username!='@dmin':
-#         messagebox.showerror("Error","Invalid Username!")
-
-
-img=PhotoImage(file='log.png') #add image at side
-Label(root,image=img,bg='white').place(x=50,y=50)
-
-frame=Frame(root,width=350,height=350,bg='#d9d9d9') #background frame for login work
-frame.place(x=480,y=70)
-
-heading=Label(frame,text='Sign in',fg='#c69512',bg='#d9d9d9',font=('Microsoft YaHei UI Light',24,'bold')) #styling heading
-heading.place(x=130,y=5)
-
-#....................
+# Username animation
 def on_enter(e):
-    user.delete(0,'end') #making function for animation in entry box of username
+    user_entry.delete(0,'end')
 
 def on_leave(e):
-    name=user.get()
-    if name=='':
-        user.insert(0,'Username')
+    name=user_entry.get()
+    if name=="":
+        user_entry.insert(0,'Username')
 
-user=Entry(frame,width=26,fg='black',border=0,bg='lavender',font=('Microsoft YaHei UI Light',11)) #add entry box
-user.place(x=30,y=80)
-user.insert(0,'Username') #adds a default input in entrybox when running the code
-user.bind('<FocusIn>', on_enter)
-user.bind('<FocusOut>',on_leave)
+# Username Entry
+user_entry = tk.Entry(frame, width=30, fg='black', border=0, bg='white', font=('Arial', 12))
+user_entry.place(x=40, y=80)
+user_entry.insert(0, 'Username')
+user_entry.bind('<FocusIn>',on_enter)
+user_entry.bind('<FocusOut>',on_leave)
 
-Frame(frame,width=295,height=2,bg='black').place(x=25,y=107) #adds line under entry
-#....................
-
+# Password animation
 def on_enter(e):
-    password.delete(0,'end') #making function for animation in entry box of password
+    password_entry.delete(0,'end')
 
 def on_leave(e):
-    name=password.get()
-    if name=='':
-        password.insert(0,'Password')
+    name=password_entry.get()
+    if name=="":
+        password_entry.insert(0,'Password')
 
+# Password Entry
+password_entry = tk.Entry(frame, width=30, fg='black', border=0, bg='white', font=('Arial', 12), show='*')
+password_entry.place(x=40, y=150)
+password_entry.insert(0, 'Password')
+password_entry.bind('<FocusIn>',on_enter)
+password_entry.bind('<FocusOut>',on_leave)
 
+# Background Image
+img = tk.PhotoImage(file='log.png')
+background_label = tk.Label(root, image=img, bg='#f0f0f0')
+background_label.place(x=50, y=50)
 
-password=Entry(frame,width=26,fg='black',border=0,bg='lavender',font=('Microsoft YaHei UI Light',11)) #add entry box
-password.place(x=30,y=150)
-password.insert(0,'Password') #adds a default input in entrybox when running the code
-password.bind('<FocusIn>', on_enter)
-password.bind('<FocusOut>',on_leave)
+# Heading
+heading = tk.Label(frame, text='Sign in', fg='#c69512', bg='#f0f0f0', font=('Arial', 24, 'bold'))
+heading.place(x=130, y=5)
 
-Frame(frame,width=295,height=2,bg='black').place(x=25,y=177) #adds line under entry
-#....................
+# Sign In Button
+sign_in_button = tk.Button(frame, width=45, pady=10, text='Sign in', bg='#c69512', fg='white', font=('Arial', 12, 'bold'), border=0, command=login_user)
+sign_in_button.place(x=10, y=220)
 
-Button(frame,width=39,pady=10,text='Sign in',bg='white',cursor='hand2',fg='chocolate',border=0,command=database).place(x=35,y=204) #adding signin button
-label=Label(frame,text='Create Account ?',fg='black',bg='lavender',font=('Microsoft YaHei UI Light',9)) #adding label
-label.place(x=75,y=270)
+# Create Account Label
+create_account_label = tk.Label(frame, text='Create Account ?', fg='black', bg='#f0f0f0', font=('Arial', 10))
+create_account_label.place(x=130, y=270)
 
-sign_up=Button(frame,width=6,text='Sign up',border=0,bg='lavender',cursor='hand2',fg='#57a1f8',command=register_page) #add button for new signup ones
-sign_up.place(x=215,y=270)
+# Sign Up Button
+sign_up_button = tk.Button(frame, width=8, text='Sign up', border=0, bg='#f0f0f0', fg='#57a1f8', font=('Arial', 10, 'underline'), cursor='hand2')
+sign_up_button.place(x=265, y=270)
 
 root.mainloop()
-
