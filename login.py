@@ -2,6 +2,10 @@ import tkinter as tk
 from tkinter import messagebox
 import pymysql
 
+def register_page():
+    root.destroy()
+    import sign_in
+
 def login_user():
     username = user_entry.get()
     user_password = password_entry.get()
@@ -89,7 +93,7 @@ create_account_label = tk.Label(frame, text='Create Account ?', fg='black', bg='
 create_account_label.place(x=130, y=270)
 
 # Sign Up Button
-sign_up_button = tk.Button(frame, width=8, text='Sign up', border=0, bg='#f0f0f0', fg='#57a1f8', font=('Arial', 10, 'underline'), cursor='hand2')
+sign_up_button = tk.Button(frame, width=8, text='Sign up', border=0, bg='#f0f0f0', fg='#57a1f8', font=('Arial', 10, 'underline'), cursor='hand2',command=register_page)
 sign_up_button.place(x=265, y=270)
 
 root.mainloop()
