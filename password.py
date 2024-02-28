@@ -1,61 +1,58 @@
 import tkinter as tk
 from tkinter import messagebox
 
-class PasswordManager:
-    def __init__(self, master):
-        self.master = master
-        self.master.title("Password Manager")
-        self.master.geometry("300x200")
+def save_password():
+    username = username_entry.get()
+    password = password_entry.get()
 
-        self.accounts = {}
+    if not username or not password:
+        messagebox.showerror("Error", "Please enter both username and password.")
+        return
 
-        self.label = tk.Label(self.master, text="Enter Account:")
-        self.label.pack()
+    with open("passwords.txt", "a") as file:
+        file.write(f"{username}:{password}\n")
+    messagebox.showinfo("Success", "Password saved successfully.")
 
-        self.account_entry = tk.Entry(self.master)
-        self.account_entry.pack()
+def retrieve_password():
+    username = username_entry.get()
 
-        self.label2 = tk.Label(self.master, text="Enter Password:")
-        self.label2.pack()
+    if not username:
+        messagebox.showerror("Error", "Please enter the username to retrieve password.")
+        return
 
-        self.password_entry = tk.Entry(self.master, show="*")
-        self.password_entry.pack()
+    found = False
+    with open("passwords.txt", "r") as file:
+        for line in file:
+            if line.startswith(username + ":"):
+                password = line.split(":")[1].strip()
+                messagebox.showinfo("Success", f"Retrieved Password: {password}")
+                found = True
+                break
+    if not found:
+        messagebox.showerror("Error", "Password not found.")
 
-        self.save_button = tk.Button(self.master, text="Save Password", command=self.save_password)
-        self.save_button.pack()
+# Initialize Tkinter
+root = tk.Tk()
+root.title("Password Manager")
 
-        self.retrieve_button = tk.Button(self.master, text="Retrieve Password", command=self.retrieve_password)
-        self.retrieve_button.pack()
+# Create GUI components
+username_label = tk.Label(root, text="Username:")
+username_label.grid(row=0, column=0, padx=10, pady=5)
 
-    def save_password(self):
-        account = self.account_entry.get()
-        password = self.password_entry.get()
+username_entry = tk.Entry(root)
+username_entry.grid(row=0, column=1, padx=10, pady=5)
 
-        if account and password:
-            self.accounts[account] = password
-            messagebox.showinfo("Success", "Password saved successfully!")
-            self.clear_entries()
-        else:
-            messagebox.showerror("Error", "Please enter both account and password!")
+password_label = tk.Label(root, text="Password:")
+password_label.grid(row=1, column=0, padx=10, pady=5)
 
-    def retrieve_password(self):
-        account = self.account_entry.get()
+password_entry = tk.Entry(root, show="*")
+password_entry.grid(row=1, column=1, padx=10, pady=5)
 
-        if account in self.accounts:
-            password = self.accounts[account]
-            messagebox.showinfo("Password", f"Password for {account}: {password}")
-            self.clear_entries()
-        else:
-            messagebox.showerror("Error", f"No password found for account: {account}")
+save_button = tk.Button(root, text="Save Password", command=save_password)
+save_button.grid(row=2, column=0, columnspan=2, pady=10)
 
-    def clear_entries(self):
-        self.account_entry.delete(0, tk.END)
-        self.password_entry.delete(0, tk.END)
+retrieve_button = tk.Button(root, text="Retrieve Password", command=retrieve_password)
+retrieve_button.grid(row=3, column=0, columnspan=2, pady=10)
 
-def main():
-    root = tk.Tk()
-    password_manager = PasswordManager(root)
-    root.mainloop()
-
-if __name__ == "__main__":
-    main()
+# Run the Tkinter event loop
+root.mainloop()

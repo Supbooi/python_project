@@ -30,7 +30,7 @@ def login_user():
         messagebox.showinfo("Succes","Login in sucessfull")
 
     root.destroy()
-    import pwgen
+    import Home_page
        
 root = tk.Tk()
 root.title('LOGIN')
