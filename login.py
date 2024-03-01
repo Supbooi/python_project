@@ -24,6 +24,7 @@ def login_user():
     query = 'SELECT * FROM data WHERE username=%s AND password=%s'
     cursor.execute(query, (username, user_password))
     row = cursor.fetchone()
+
     if row == None:
         messagebox.showerror("Error","Invalid Username or Password")
     else:
@@ -51,7 +52,7 @@ def on_leave(e):
     name=user_entry.get()
     if name=="":
         user_entry.insert(0,'Username')
-
+ 
 # Username Entry
 user_entry = tk.Entry(frame, width=30, fg='black', border=0, bg='white', font=('Arial', 12))
 user_entry.place(x=40, y=80)

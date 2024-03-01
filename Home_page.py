@@ -1,6 +1,20 @@
 from tkinter import *
 from PIL import Image, ImageTk
 
+root = Tk()
+root.title("Home Page")
+root.geometry("1222x701")
+root.iconbitmap("1st.ico")
+root.resizable(False,False)
+
+image = Image.open('main_page.png')
+image= image.resize((2200,1290))
+
+img= ImageTk.PhotoImage(image)
+
+background_label = Label(root, image=img, border=0)
+background_label.place(x=0, y=0,relwidth=1,relheight=1)
+
 def save_password():
     root.destroy()
     import password
@@ -9,34 +23,19 @@ def generate_password():
     root.destroy() 
     import pwgen
 
-root = Tk()
-root.title("Password Management")
-root.geometry("1000x550")
-root.iconbitmap("1st.ico")
-root.resizable(False,False)
 
-image = Image.open('dashboard.png')
-image = image.resize((1000, 550))
+frame = Frame(root, width=600, height=400, bg='#f0f0f0')
+frame.place(x=300,y=120)
 
-img = ImageTk.PhotoImage(image)
 
-label = Label(root, image=img, border=0)
-label.place(x=0, y=0, relwidth=1, relheight=1)
 
-# Increase frame size and anchor it to the left side
-frame = Frame(root, bg='white', width=300, height=400)
-frame.place(x=480, y=70)
+heading =Label(frame, text='Password Management System', fg='#c69512', bg='#f0f0f0', font=('Arial', 20, 'bold'))
+heading.place(x=120, y=5)
 
-# Create a frame for our buttons
-button_frame = Frame(frame, bg='white')
-button_frame.pack(side=LEFT, padx=20, pady=20)
+b1=Button(frame, width=45, text='Save Password', bg='#c69512', fg='white', font=('Arial', 12, 'bold'), border=3,command=save_password)
+b1.place(x=70, y=120)
 
-# Enhance button appearance
-save_button = Button(button_frame, text="Save Password", width=15, height=2, command=save_password,borderwidth=2, relief="raised", padx=10, pady=5,fg='#57a1f8', font=('Arial', 10, 'underline'), cursor='hand2')
-save_button.pack(pady=10)
-
-generate_button = Button(button_frame, text="Generate Password", width=15, height=2, command=generate_password,borderwidth=2, relief="raised", padx=10, pady=5)
-generate_button.pack(pady=10)
-
+b2=Button(frame, width=45, text='Generate Password', bg='#c69512', fg='white', font=('Arial', 12, 'bold'), border=3,command=generate_password)
+b2.place(x=70, y=220)
 
 root.mainloop()

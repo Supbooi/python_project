@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import messagebox, ttk
 import pymysql
 
 def add_password():
@@ -43,8 +43,26 @@ def close_window():
     conn.close()
     root.destroy()
 
+def show_data():
+    top = tk.Toplevel()
+    top.title("Database Entries")
+
+    tree = ttk.Treeview(top)
+    tree["columns"] = ("Password Reason", "Username", "Password")
+    tree.heading("#0", text="ID")
+    tree.heading("Password Reason", text="Password Reason")
+    tree.heading("Username", text="Username")
+    tree.heading("Password", text="Password")
+
+    cursor.execute("SELECT * FROM passwords")
+    rows = cursor.fetchall()
+    for row in rows:
+        tree.insert("", "end", text=row[0], values=(row[1], row[2], row[3]))
+
+    tree.pack(expand=True, fill="both")
+
 root = tk.Tk()
-root.title("Password Management System")
+root.title("Admin Panel")
 
 frame = tk.Frame(root)
 frame.pack(padx=10, pady=10)
@@ -85,8 +103,11 @@ button_update.grid(row=5, column=0, padx=5, pady=5)
 button_clear = tk.Button(frame, text="Clear Entries", command=clear_entries)
 button_clear.grid(row=5, column=1, padx=5, pady=5)
 
+button_show_data = tk.Button(frame, text="Show Database Entries", command=show_data)
+button_show_data.grid(row=6, columnspan=2, padx=5, pady=5)
+
 button_exit = tk.Button(frame, text="Exit", command=close_window)
-button_exit.grid(row=6, columnspan=2, padx=5, pady=5)
+button_exit.grid(row=7, columnspan=2, padx=5, pady=5)
 
 # Connect to MySQL database
 conn = pymysql.connect(
@@ -97,15 +118,5 @@ conn = pymysql.connect(
 )
 
 cursor = conn.cursor()
-
-# Create passwords table if not exists
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS password_manager (
-        id INT AUTO_INCREMENT PRIMARY KEY,
-        password_reason VARCHAR(255) NOT NULL,
-        username VARCHAR(255) NOT NULL,
-        password VARCHAR(255) NOT NULL
-    )
-""")
 
 root.mainloop()
