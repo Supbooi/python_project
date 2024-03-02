@@ -24,18 +24,19 @@ def generate_password():
     import pwgen
 
 
-frame = Frame(root, width=600, height=400, bg='#feca91')
+frame = Frame(root, width=600, height=400, bg='#10303f')
 frame.place(x=300,y=120)
 
 
 
-heading =Label(frame, text='Password Management System', fg='black', bg='#feca91', font=('Arial', 20, 'bold'))
-heading.place(x=120, y=5)
+heading =Label(frame, text='Password Management System', fg='white', bg='#10303f', font=('Arial', 20, 'bold'))
+heading.place(x=110, y=5)
 
 b1=Button(frame, width=45, text='Save Password', bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=3,command=save_password)
 b1.place(x=70, y=120)
 
 b2=Button(frame, width=45, text='Generate Password', bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=3,command=generate_password)
 b2.place(x=70, y=220)
+
 
 root.mainloop()
