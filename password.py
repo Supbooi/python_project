@@ -56,23 +56,23 @@ def close_window(conn, root):
     conn.close()
     root.destroy()
 
-def show_data(conn, cursor):
-    top = tk.Toplevel()
-    top.title("Database Entries")
+# def show_data(conn, cursor):
+#     top = tk.Toplevel()
+#     top.title("Database Entries")
 
-    tree = ttk.Treeview(top)
-    tree["columns"] = ("Password Reason", "Username", "Password")
-    tree.heading("#0", text="ID")
-    tree.heading("Password Reason", text="Password Reason")
-    tree.heading("Username", text="Username")
-    tree.heading("Password", text="Password")
+#     tree = ttk.Treeview(top)
+#     tree["columns"] = ("Password Reason", "Username", "Password")
+#     tree.heading("#0", text="ID")
+#     tree.heading("Password Reason", text="Password Reason")
+#     tree.heading("Username", text="Username")
+#     tree.heading("Password", text="Password")
 
-    cursor.execute("SELECT * FROM passwords")
-    rows = cursor.fetchall()
-    for row in rows:
-        tree.insert("", "end", text=row[0], values=(row[1], row[2], row[3]))
+#     cursor.execute("SELECT * FROM passwords")
+#     rows = cursor.fetchall()
+#     for row in rows:
+#         tree.insert("", "end", text=row[0], values=(row[1], row[2], row[3]))
 
-    tree.pack(expand=True, fill="both")
+#     tree.pack(expand=True, fill="both")
 
 root = tk.Tk()
 root.title("Password Manager")
@@ -133,8 +133,8 @@ button_update.grid(row=5, column=0, padx=5, pady=5)
 button_clear = tk.Button(frame, text="Clear Entries",bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=1, command=clear_entries)
 button_clear.grid(row=5, column=1, padx=5, pady=5)
 
-button_show_data = tk.Button(frame, text="Show Database Entries",bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=1, command=lambda: show_data(conn, cursor))
-button_show_data.grid(row=6, columnspan=2, padx=5, pady=5)
+# button_show_data = tk.Button(frame, text="Show Database Entries",bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=1, command=lambda: show_data(conn, cursor))
+# button_show_data.grid(row=6, columnspan=2, padx=5, pady=5)
 
 button_exit = tk.Button(frame, text="Exit",bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=3, command=lambda: close_window(conn, root))
 button_exit.grid(row=7, columnspan=2, padx=5, pady=5)

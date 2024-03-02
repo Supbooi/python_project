@@ -30,9 +30,23 @@ def login_user():
     else:
         messagebox.showinfo("Succes","Login in sucessfull")
 
+
+
     root.destroy()
     import Home_page
-       
+def signin():
+        Username = user_entry.get()
+        Password = password_entry.get()
+
+        if Username == '@dmin' and Password == '6969':
+            root.destroy()
+            import admin
+        elif Username != '@dmin' and Password != '6969':
+            messagebox.showerror("Error", "Username or password is incorrect")
+        elif Password != '6969':
+            messagebox.showerror("Error", "Invalid Password!")
+        elif Username != '@dmin':
+            messagebox.showerror("Error", "Invalid Username!")
 root = tk.Tk()
 root.title('LOGIN')
 root.geometry('925x500+300+200')
@@ -89,6 +103,9 @@ heading.place(x=130, y=5)
 sign_in_button = tk.Button(frame, width=45, pady=10, text='Sign in', bg='#c69512', fg='white', font=('Arial', 12, 'bold'), border=0, command=login_user)
 sign_in_button.place(x=10, y=220)
 
+# Admin login Button
+admin_button = tk.Button(frame, width=45, pady=10, text='admin', bg='#c69512', fg='white', font=('Arial', 12, 'bold'), border=0, command=signin)
+admin_button.place(x=10, y=320)
 # Create Account Label
 create_account_label = tk.Label(frame, text='Create Account ?', fg='black', bg='#f0f0f0', font=('Arial', 10))
 create_account_label.place(x=130, y=270)
