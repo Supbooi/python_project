@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox
+from PIL import Image, ImageTk
 import pymysql
 
 def add_password():
@@ -8,7 +9,7 @@ def add_password():
     password = entry_password.get()
 
     if password_reason and username and password:
-        cursor.execute("INSERT INTO passwords (password_reason, username, password) VALUES (%s, %s, %s)", (password_reason, username, password))
+        cursor.execute("INSERT INTO password_manager (password_reason, username, password) VALUES (%s, %s, %s)", (password_reason, username, password))
         conn.commit()
         messagebox.showinfo("Success", "Password added successfully!")
     else:
@@ -17,7 +18,7 @@ def add_password():
 def delete_password():
     password_reason = entry_reason.get()
     if password_reason:
-        cursor.execute("DELETE FROM passwords WHERE password_reason = %s", (password_reason,))
+        cursor.execute("DELETE FROM password_manager WHERE password_reason = %s", (password_reason,))
         conn.commit()
         messagebox.showinfo("Success", "Password deleted successfully!")
     else:
@@ -27,7 +28,7 @@ def update_password():
     password_reason = entry_reason.get()
     new_password = entry_new_password.get()
     if password_reason and new_password:
-        cursor.execute("UPDATE passwords SET password = %s WHERE password_reason = %s", (new_password, password_reason))
+        cursor.execute("UPDATE password_manager SET password = %s WHERE password_reason = %s", (new_password, password_reason))
         conn.commit()
         messagebox.showinfo("Success", "Password updated successfully!")
     else:
@@ -45,9 +46,21 @@ def close_window():
 
 root = tk.Tk()
 root.title("Password Management System")
+root.geometry("1222x701")
+root.iconbitmap("1st.ico")
+root.resizable(False,False)
+
+image = Image.open('data_protection.png')
+image= image.resize((1230,700))
+
+img= ImageTk.PhotoImage(image)
+
+background_label = tk.Label(root, image=img, border=0)
+background_label.place(x=0, y=0,relwidth=1,relheight=1)
+
 
 frame = tk.Frame(root)
-frame.pack(padx=10, pady=10)
+frame.pack(padx=10, pady=100)
 
 label_reason = tk.Label(frame, text="Password Reason:")
 label_reason.grid(row=0, column=0, sticky="w", padx=5, pady=5)
