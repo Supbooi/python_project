@@ -14,13 +14,11 @@ def add_password(conn, cursor):
     password = entry_password.get()
 
     if password_reason and username and password:
-        # Check if the username already exists
         cursor.execute("SELECT * FROM passwords WHERE username = %s", (username,))
         existing_user = cursor.fetchone()
         if existing_user:
             messagebox.showerror("Error", "Username already exists!")
         else:
-            # Insert the new entry if the username is unique
             cursor.execute("INSERT INTO passwords (password_reason, username, password) VALUES (%s, %s, %s)", (password_reason, username, password))
             conn.commit()
             messagebox.showinfo("Success", "Password added successfully!")
@@ -46,6 +44,18 @@ def update_password(conn, cursor):
     else:
         messagebox.showerror("Error", "Please enter the password reason and new password.")
 
+def retrieve_password(conn, cursor):
+    username = entry_username.get()
+    if username:
+        cursor.execute("SELECT password FROM passwords WHERE username = %s", (username,))
+        password = cursor.fetchone()
+        if password:
+            messagebox.showinfo("Success", f"Password for {username}: {password[0]}")
+        else:
+            messagebox.showerror("Error", "Username not found!")
+    else:
+        messagebox.showerror("Error", "Please enter the username.")
+
 def clear_entries():
     entry_reason.delete(0, tk.END)
     entry_username.delete(0, tk.END)
@@ -56,24 +66,14 @@ def close_window(conn, root):
     conn.close()
     root.destroy()
 
-# def show_data(conn, cursor):
-#     top = tk.Toplevel()
-#     top.title("Database Entries")
+conn = pymysql.connect(
+    host='localhost',
+    user='root',
+    password='plmokn@12',
+    database='password_manager'
+)
 
-#     tree = ttk.Treeview(top)
-#     tree["columns"] = ("Password Reason", "Username", "Password")
-#     tree.heading("#0", text="ID")
-#     tree.heading("Password Reason", text="Password Reason")
-#     tree.heading("Username", text="Username")
-#     tree.heading("Password", text="Password")
-
-#     cursor.execute("SELECT * FROM passwords")
-#     rows = cursor.fetchall()
-#     for row in rows:
-#         tree.insert("", "end", text=row[0], values=(row[1], row[2], row[3]))
-
-#     tree.pack(expand=True, fill="both")
-
+cursor = conn.cursor()
 root = tk.Tk()
 root.title("Password Manager")
 root.geometry("1222x701")
@@ -88,7 +88,6 @@ img= ImageTk.PhotoImage(image)
 background_label = tk.Label(root, image=img, border=0)
 background_label.place(x=0, y=0,relwidth=1,relheight=1)
 
-# Calculate frame position to keep it centered
 frame_width = 1000
 frame_height = 600
 x_position = (root.winfo_screenwidth() // 2) - (frame_width // 2)
@@ -130,27 +129,16 @@ button_delete.grid(row=4, column=1, padx=5, pady=5)
 button_update = tk.Button(frame, text="Update Password",bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=1, command=lambda: update_password(conn, cursor))
 button_update.grid(row=5, column=0, padx=5, pady=5)
 
-button_clear = tk.Button(frame, text="Clear Entries",bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=1, command=clear_entries)
-button_clear.grid(row=5, column=1, padx=5, pady=5)
+button_retrieve = tk.Button(frame, text="Retrieve Password",bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=1, command=lambda: retrieve_password(conn, cursor))
+button_retrieve.grid(row=5, column=1, padx=5, pady=5)
 
-# button_show_data = tk.Button(frame, text="Show Database Entries",bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=1, command=lambda: show_data(conn, cursor))
-# button_show_data.grid(row=6, columnspan=2, padx=5, pady=5)
+button_clear = tk.Button(frame, text="Clear Entries",bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=1, command=clear_entries)
+button_clear.grid(row=6, column=0, padx=5, pady=5)
 
 button_exit = tk.Button(frame, text="Exit",bg='#1cb4c3', fg='white', font=('Arial', 12, 'bold'), border=3, command=lambda: close_window(conn, root))
-button_exit.grid(row=7, columnspan=2, padx=5, pady=5)
-
-# Connect to MySQL database
-conn = pymysql.connect(
-    host='localhost',
-    user='root',
-    password='plmokn@12',
-    database='password_manager'
-)
-
-cursor = conn.cursor()
+button_exit.grid(row=6, column=1, padx=5, pady=5)
 
 back_to_home_page=tk.Button(text='HOME', fg='white', bg='#1976a8', font=('Arial', 12,'bold'),command=homepage)
 back_to_home_page.place(x=70, y=10)
 
 root.mainloop()
-
